@@ -19,12 +19,14 @@ void Game::initGUI()
     UI_text.setPosition(vm.width - 100, 10);
     UI_text.setString("test");
 
+    //GameOver text
     GameOverText.setFont(font);
     GameOverText.setCharacterSize(60);
     GameOverText.setFillColor(sf::Color::White);
     GameOverText.setPosition(window->getSize().x/3.f - GameOverText.getGlobalBounds().width / 2.5f, 
                     window->getSize().y / 2.45f - GameOverText.getGlobalBounds().height / 2.5f);
     GameOverText.setString("Game Over");
+
     //player healthbar    
     playerHpBar.setSize(sf::Vector2f(300.f, 25.f));
     playerHpBar.setFillColor(sf::Color::Red);
@@ -91,7 +93,7 @@ void Game::update()
     player->update();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player->isAttack())
-    {//left
+    {
         bullets.push_back(new Bullet(
             textures["BULLET"],
             player->getPos().x + player->getBounds().width / 3,//this makes bullet fire from center
@@ -114,6 +116,7 @@ void Game::updateGUI()
     float perc = static_cast<float>(player->getHealth()) / player->getHealthPool();
     playerHpBar.setSize(sf::Vector2f(perc * 300.f, 25.f));
 
+    //Make sure the healthbar doesn't grow into negitives
     if (playerHpBar.getSize().x < 0)
     {
         playerHpBar.setFillColor(sf::Color::Transparent);
@@ -124,18 +127,16 @@ void Game::updateGUI()
 
 void Game::updateBullets()
 {
-    int counter = 0;
-    for (auto& b : bullets) 
+    for (unsigned int i = 0; i < bullets.size(); i++) 
     {
-        b->update();
-        if (b->getBounds().top + b->getBounds().height < 0.f) 
+        bullets[i]->update();
+        if (bullets[i]->getBounds().top + bullets[i]->getBounds().height < 0.f)
         {
-            delete bullets.at(counter);
-            bullets.erase(bullets.begin() + counter);
-            counter--;
+            delete bullets.at(i);
+            bullets.erase(bullets.begin() + i);
         }
-        ++counter;
     }
+ 
 }
 
 void Game::updateEnemies()
@@ -172,6 +173,7 @@ void Game::updateCombat()
         {
             if (isCollision(enemies[i]->getBounds(), bullets[j]->getBounds()))
             {
+                //bullets do 1 damage
                 enemies.at(i)->setHealth(-1);
                 delete bullets.at(j);
                 bullets.erase(bullets.begin() + j);
@@ -183,6 +185,7 @@ void Game::updateCombat()
                     enemies.erase(enemies.begin() + i);
                     break;
                 }
+                //get points for hitting targets
                 score++;
                 
                 break;
@@ -193,7 +196,6 @@ void Game::updateCombat()
 
 bool Game::isCollision(const sf::FloatRect& obj1, const sf::FloatRect& obj2)
 {
-    //if(enemy.getBounds().intersects(bullet.getBounds())
     return obj1.intersects(obj2);
 }
 
@@ -220,7 +222,6 @@ void Game::renderGUI()
     window->draw(UI_text);
     window->draw(playerHpPoolBar);
     window->draw(playerHpBar);
-   
 }
 
 void Game::render()

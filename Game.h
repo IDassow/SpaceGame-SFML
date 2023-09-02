@@ -26,21 +26,16 @@ private:
 
 	//Resources
 	std::map<std::string, sf::Texture> textures;
-	std::vector<Bullet*> bullets;
-
-	//mouse
-	//sf::Vector2i mousePos;
-	//sf::Vector2f mouseView;
 
 	//background
 	sf::Sprite WorldBG;
 	sf::RectangleShape playerHpBar;
 	sf::RectangleShape playerHpPoolBar;
-	
 
 	//game objects
 	Player* player;
 	std::vector<Enemy*> enemies;
+	std::vector<Bullet*> bullets;
 	float spawnTimer;
 	float spawnTimerMax;
 	uint32_t score;
@@ -61,7 +56,6 @@ public:
 	//Accessors
 
 	void run();
-	//const bool getEndGame() const { return gameOver; };
 
 	//methods
 	void update();

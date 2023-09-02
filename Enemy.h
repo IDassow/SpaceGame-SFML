@@ -25,10 +25,10 @@ public:
 
 private:
 	sf::CircleShape shape;
-	size_t type, hp, hpMax, damage, points;
+	size_t hp, hpMax, damage, points;
 	float speed;
 
-	sf::CircleShape initShape();
+	sf::CircleShape initShape();//returns a shape obj to be initalized in constructor
 
 
 };

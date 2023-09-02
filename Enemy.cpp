@@ -1,14 +1,13 @@
 #include "Enemy.h"
 
 Enemy::Enemy(float pos_x, float pos_y)
-	: shape{initShape()},
-	type{ 0 }, 
+	: shape{initShape()}, 
 	hp{ shape.getPointCount()/2 }, 
 	hpMax{ shape.getPointCount()/2 },  
 	points{ shape.getPointCount() }, 
 	speed{ 10.f }
 {
-	
+	//hp, points, and speed dictated by shape vertices and shape size
 	speed /= shape.getPointCount();
 	shape.setPosition(pos_x, pos_y);
 	damage = static_cast<int>(shape.getRadius()/10);
